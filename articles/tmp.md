@@ -5887,18 +5887,142 @@ int main()
 ## 10.3 総合問題(3)
 ### A73 - Marathon Route
 
+みんな大好きダイクストラ法。
+
+木がある道を通るインセンティブとして、微小の距離の短縮は思いつかないと難しいものがあるかも。
+
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bu
 
 ```cpp
+int N, M;
+int A[100009];
+int B[100009];
+int C[100009];
+int D[100009];
+vector<pair<int, int>> Graph[8009];
+
+long long cur[8009];
+bool kakutei[8009];
+priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> Q;
+
+int main()
+{
+	// 入力
+	cin >> N >> M;
+	for (int i = 1; i <= M; i++)
+	{
+		cin >> A[i] >> B[i] >> C[i] >> D[i];
+		if (D[i] == 1)
+		{
+			Graph[A[i]].push_back(make_pair(B[i], C[i] * 1e5 - 1));
+			Graph[B[i]].push_back(make_pair(A[i], C[i] * 1e5 - 1));
+		}
+		else
+		{
+			Graph[A[i]].push_back(make_pair(B[i], C[i] * 1e5));
+			Graph[B[i]].push_back(make_pair(A[i], C[i] * 1e5));
+		}
+	}
+	// 配列の初期化
+	for (int i = 1; i <= N; i++) kakutei[i] = false;
+	for (int i = 1; i <= N; i++) cur[i] = (1LL << 60);
+	// スタート地点にキューを追加
+	cur[1] = 0;
+	Q.push(make_pair(cur[1], 1));
+	// ダイクストラ法
+	while (!Q.empty())
+	{
+		int pos = Q.top().second;
+		Q.pop();
+		// もし確定済みだったらスキップ
+		if (kakutei[pos]) continue;
+		// cur[nex]の値を更新
+		kakutei[pos] = true;
+		for (int i = 0; i < Graph[pos].size(); i++)
+		{
+			int nex = Graph[pos][i].first;
+			int cost = Graph[pos][i].second;
+			if (cur[nex] > cur[pos] + cost)
+			{
+				cur[nex] = cur[pos] + cost;
+				Q.push(make_pair(cur[nex], nex));
+			}
+		}
+	}
+
+	// 答えを出力
+	long long distance = (cur[N] + 9999) / 1e5;
+	long long num_tree = distance * 1e5 - cur[N];
+	cout << distance << " " << num_tree << endl;
+	return 0;
+}
 ```
 
 
 ## 10.4 総合問題(4)
 ### A74 - Board Game
 
+実際にバブルソートを行って操作回数を調べたが、実は`1 <= i <  j`かつ`Ai > Aj`を満たすような組の数と一致するらしく、もっと簡潔に実装できたらしいです。
+
+順序関係が逆転しているペアの個数を転倒数と言うらしいので、ぜひ調べてみてください。
+
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bv
 
 ```cpp
+int N;
+int P[109][109];
+int row[109];
+int column[109];
+
+int main()
+{
+	// 入力
+	cin >> N;
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= N; j++)
+		{
+			cin >> P[i][j];
+			if (P[i][j] != 0)
+			{
+				row[i] = P[i][j];
+				column[j] = P[i][j];
+			}
+		}
+	}
+	// バブルソートの必要回数をカウント
+	int count_sort = 0;
+	// rowの並び替え
+	for (int i = 1; i < N; i++)
+	{
+		for (int j = 1; j < N; j++)
+		{
+			if (row[j] > row[j + 1])
+			{
+				count_sort++;
+				int tmp = row[j];
+				row[j] = row[j + 1];
+				row[j + 1] = tmp;
+			}
+		}
+	}
+	// columnの並び替え
+	for (int i = 1; i < N; i++)
+	{
+		for (int j = 1; j < N; j++)
+		{
+			if (column[j] > column[j + 1])
+			{
+				count_sort++;
+				int tmp = column[j];
+				column[j] = column[j + 1];
+				column[j + 1] = tmp;
+			}
+		}
+	}
+	cout << count_sort << endl;
+	return 0;
+}
 ```
 
 ## 10.5 総合問題(5)
@@ -5907,6 +6031,47 @@ https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bv
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bw
 
 ```cpp
+int N;
+int T[109];
+int D[109];
+int dp[109][1449];
+vector<pair<int, int>> problems;
+
+int main()
+{
+	// 入力
+	cin >> N;
+	for (int i = 1; i <= N; i++)
+	{
+		cin >> T[i] >> D[i];
+		problems.push_back(make_pair(D[i], T[i]));
+	}
+	sort(problems.begin(), problems.end());
+	for (int i = 1; i <= N; i++)
+	{
+		D[i] = problems[i - 1].first;
+		T[i] = problems[i - 1].second;
+	}
+	// 配列の初期化
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 0; j <= 1440; j++) dp[i][j] = -1;
+	}
+	// 動的計画法
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 0; j <= 1440; j++)
+		{
+			if (j < T[i] || j > D[i]) dp[i][j] = dp[i - 1][j];
+			else dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - T[i]] + 1);
+		}
+	}
+	// 答えを出力
+	int ans = 0;
+	for (int j = 0; j <= 1440; j++) ans = max(ans, dp[N][j]);
+	cout << ans << endl;
+	return 0;
+}
 ```
 
 ## 10.6 総合問題(6)
