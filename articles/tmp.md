@@ -6079,9 +6079,81 @@ int main()
 
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bx
 
+以下のように単純に動的計画法を実装するだけではTLEになってしまう
+
 ```cpp
+long long N, W, L, R;
+long long X[150009];
+long long dp[150009];
+
+int main()
+{
+	// 入力
+	cin >> N >> W >> L >> R;
+	for (int i = 1; i <= N; i++) cin >> X[i];
+	X[0] = 0;
+	X[N + 1] = W;
+	for (int i = 0; i <= N + 1; i++) dp[i] = 0;
+	// 動的計画法
+	dp[0] = 1;
+	for (int i = 1; i <= N + 1; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if (X[i] - X[j] >= L && X[i] - X[j] <= R) dp[i] += dp[j];
+			dp[i] %= 1000000007;
+		}
+	}
+	// 出力
+	cout << dp[N + 1] << endl;
+	return 0;
+}
 ```
 
+以下のように累積和を用いて計算量をO(N^2)からO(NlogN)まで落とすことで無事AC！
+
+```cpp
+const long long mod = 1000000007;
+
+long long N, W, L, R;
+long long X[150009];
+long long dp[150009];
+long long sum[150009];
+
+int main()
+{
+	// 入力
+	cin >> N >> W >> L >> R;
+	for (int i = 1; i <= N; i++) cin >> X[i];
+	X[0] = 0;
+	X[N + 1] = W;
+	for (int i = 0; i <= N + 1; i++)
+	{
+		sum[i] = 0;
+		dp[i] = 0;
+	}
+	// 動的計画法
+	dp[0] = 1;
+	sum[0] = 1;
+	for (int i = 1; i <= N + 1; i++)
+	{
+		int posL = lower_bound(X, X + N + 2, X[i] - R) - X;
+		int posR = lower_bound(X, X + N + 2, X[i] - L + 1) - X;
+		posR--;
+		// 累積和でdp[i]を計算
+		if (posR == -1) dp[i] = 0;
+		else dp[i] = sum[posR];
+		if (posL >= 1) dp[i] -= sum[posL - 1];
+		dp[i] = (dp[i] + mod) % mod; // 引き算のあまりに注意！
+		// 累積和 sum[i] を更新
+		sum[i] = sum[i - 1] + dp[i];
+		sum[i] %= mod;
+	}
+	// 出力
+	cout << dp[N + 1] << endl;
+	return 0;
+}
+```
 
 ## 10.7 総合問題(7)
 ### A77 - Yokan Party（★4）
