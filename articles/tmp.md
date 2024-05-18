@@ -1874,14 +1874,11 @@ https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_y
 ## 5.0 数学的問題について
 ## 5.1 素数判定
 
-[問題 A26 Prime Check](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_z)
+### 問題 A26 Prime Check
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_z
+
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-
-using namespace std;
-
 int Q, X[10009];
 
 int main ()
@@ -1914,15 +1911,13 @@ int main ()
 }
 ```
 
-[問題 B26](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cy)
+### B26 - Output Prime Numbers
+
 エラストテネスのふるいを用いて効率的に記述する
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cy
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-
-using namespace std;
-
 int N;
 bool deleted[1000009];
 
@@ -1943,15 +1938,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 5.2 最大公約数
-[問題 A27 Calculate GCD](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_o)
+### 問題 A27 Calculate GCD
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_o
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-
-using namespace std;
-
 int A, B, min_AB, ans;
 
 int main()
@@ -1971,15 +1964,14 @@ int main()
 }
 ```
 
-[問題 B27 Calculate LCM](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cz)
+### B27 - Calculate LCM
+
 最大公約数を用いて最小公倍数を求める問題。
 A問題と同様のやり方ではTLEになってしまう。ユークリッドの互除法を用いて最大公約数は効率的に計算できることを学んだ。
 
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cz
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 long long a, b, lcm;
 
 long long ft_GCD(long long A, long long B)
@@ -2002,13 +1994,14 @@ int main()
 }
 ```
 ## 5.3 あまりの計算（1）：基本
-[問題 A28 Black Board](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ab) 
+### 問題 A28 Black Board
+
 全て足し合わせた余りを求める問題。律儀に全て足していたらlong long型を超えてしまうので、足し算の性質を活かして毎回の計算で余りを求めている。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ab
+
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2030,13 +2023,14 @@ int main()
 	return 0;
 }
 ```
-[B28 - Fibonacci Easy (mod 1000000007)](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_ap)
+
+### B28 - Fibonacci Easy (mod 1000000007)
+
 フィボナッチ数列の第N項を求める問題。A問題と同様、毎度計算のたびにあまりを求めている。
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_ap
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2053,14 +2047,15 @@ int main()
 	return 0;
 } 
 ```
+
 ## 5.4 あまりの計算（2）：累乗
-[A29 - Power](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_aq)
+### A29 - Power
+
 余りを先に計算しておいても計算結果が変わらないのは足し算も掛け算も同じ。毎度の計算で余りを求めて計算していく。早くコードのようなビットを使いなせるようになりたい。
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_aq
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 long long ft_power(long long a, long long b, long long m)
 {
 	long long p = a;
@@ -2086,15 +2081,16 @@ int main()
 	return 0;
 }
 ```
-[B29 - Power Hard](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_db)
+
+### B29 - Power Hard
+
 A問題はint型のwariという別の変数でbのどこにビットが立っているかを確認して行ったが、int型を超えてしまうからか、正常に動作しなかった。
 
 そのため、bのビットを直接動かす形に書き換えたらACとなった。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_db
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 unsigned long long ft_power(unsigned long long a, unsigned long long b, unsigned long long m)
 {
 	unsigned long long ans = 1;
@@ -2117,6 +2113,7 @@ int main()
 	return 0;
 }
 ```
+
 ## 5.5 あまりの計算（3）：割り算
 ここまで足し算・掛け算の場合はうまくいきましたが、割り算となると話が変わります。
 
@@ -2149,14 +2146,22 @@ int main()
 	return 0;
 }
 ```
-## 5.6 包除原理
-[A31 - Divisors](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ae)
-和集合の要素数を求める問題。
+
+### B30 - Combination 2
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dc
+
 ```cpp
-#include <iostream>
+```
 
-using namespace std;
+## 5.6 包除原理
+### A31 - Divisors
 
+和集合の要素数を求める問題。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ae
+
+```cpp
 int main()
 {
 	long long N;
@@ -2171,13 +2176,14 @@ int main()
 	return 0;
 }
 ```
-[B31 - Divisors Hard](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dd)
+
+### B31 - Divisors Hard
+
 こちらは3つの集合の和集合の要素数を求める問題。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dd
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	long long N;
@@ -2197,13 +2203,13 @@ int main()
 }
 ```
 ## 5.7 ゲーム（1）:必勝法
-[A32 - Game 1 ](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_af)
+### A32 - Game 1
+
 山の石をお互いが最善手で取り合った時にどちらが勝つかを出力する問題。理解できたら現実世界でも仕掛けてみたい問題。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_af
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, A, B;
@@ -2223,13 +2229,14 @@ int main()
 }
 ```
 
-[B32 - Game 5](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_de)
+### B32 - Game 5
+
+
 A問題の取れる選択肢がK個に増えたバージョン。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_de
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, K;
@@ -2257,15 +2264,20 @@ int main()
 	return 0;
 }
 ```
+
 ## 5.8 ゲーム（2）:ニム
-[A33 - Game 2](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ag)
+
+### A33 - Game 2
+
 n個の山から石を取っていき、石を取れなくなったら負けというゲームの勝者を求める。ニム和というものを求めればいいらしいが、理解はまだできていない、、
+
+
 後から[この論文](https://www.xmath.ous.ac.jp/~shibata/semi/2019_Nim.pdf)を読もうと思うので備忘録として残しておく。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ag
+
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2283,15 +2295,16 @@ int main()
 	return 0;
 }
 ```
-[B33 - Game 6](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_df)
+
+### B33 - Game 6
+
 「H*Wのマス目の一つのコマを選美、左方向か上方向の1方向に1マス以上移動させる」ため、ゲームの終了条件としては、すべてのコマが左上に来ることである。
 
 コマを動かすときは上か左の1方向しか動かせないので、縦と横の軸を別々でnim和をとると山の数が2Nのニムに帰結できる。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_df
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, H , W;
@@ -2317,14 +2330,15 @@ int main()
 	return 0;
 }
 ```
+
 ## 5.9 ゲーム（3）:Grundy数
-[A34 - Game 3](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ah)
+### A34 - Game 3
+
 i個の石の場合のGrundy数を求めておいて、最後にニム和を求める問題。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ah
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, X, Y;
@@ -2351,13 +2365,14 @@ int main()
 	return 0;
 }
 ```
-[B34 - Game 7](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dg)
+
+### B34 - Game 7
+
 上のA問題の制約が特殊なバージョン。山から削るのは2 or 3に縛られていて、山の個数が膨大な制約である。規則性を見つけれたらむしろA問題よりも簡単かもしれない。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dg
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, X, Y;
@@ -2376,15 +2391,15 @@ int main()
 	return 0;
 }
 ```
+
 ## 5.10 チャレンジ問題
-[A35 - Game 4](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ai)
+### A35 - Game 4
+
 なぜかもうすでに懐かしい動的計画法。問題は簡単dが、似たような考え方はMinimax法というリバーシAIなどにも使用されている概念らしい。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ai
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2414,17 +2429,18 @@ int main()
 	return 0;
 }
 ```
+
+
 # 6章 考察テクニック
 ## 6.0 考察テクニック入門
 競プロにはアルゴリズムだけでなく、数理パズルを解くような考察力・ひらめき力も必要になってくることが強調されていた。一見複雑で難しそうな問題を見方を変えて単純化できた時の喜びは計り知れない。
 
 ## 6.1 偶奇を考える
-[A36 - Travel](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aj)
+### A36 - Travel
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aj
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, K;
@@ -2434,14 +2450,14 @@ int main()
 	return 0;
 }
 ```
-[B36 - Switching Lights ](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_di)
+
+### B36 - Switching Lights
+
 偶奇に着目する問題。何度操作しても偶奇は入れ替わらない。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_di
+
 ```cpp
-#include <iostream>
-#include <string>
-
-using namespace std;
-
 int main()
 {
 	int N, K;
@@ -2458,13 +2474,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 6.2 足された回数を考える
-[A37 - Travel 2](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ak)
+### A37 - Travel 2
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ak
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	long long N, M, B;
@@ -2482,12 +2498,14 @@ int main()
 	return 0;
 }
 ```
-[B37 - Sum of Digits](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dj)
-f(n)をnの各桁の数字を足し合わせた合計とした時、1からNまでの数字のf(n)の合計を出力せよという問題。k桁目が+1された場合にどのくらい数が増えるかを考える。
-```cpp
-#include <iostream>
-using namespace std;
 
+### B37 - Sum of Digits
+
+f(n)をnの各桁の数字を足し合わせた合計とした時、1からNまでの数字のf(n)の合計を出力せよという問題。k桁目が+1された場合にどのくらい数が増えるかを考える。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dj
+
+```cpp
 int main() {
     long long N;
     cin >> N;
@@ -2514,14 +2532,13 @@ int main() {
     return 0;
 }
 ```
+
 ## 6.3 上限値を考える
-[A38 - Black Company 1](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_al)
+### A38 - Black Company 1
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_al
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
 int main()
 {
 	int D, N;
@@ -2543,13 +2560,12 @@ int main()
 	return 0;
 }
 ```
-[B38 - Heights of Grass](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dk)
+
+### B38 - Heights of Grass
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dk
+
 ```cpp
-#include <iostream>
-#include <string>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2581,22 +2597,17 @@ int main()
 	}
 	int ans = 0;
 	for (int i = 0; i < N; i++) ans += min_grass[i];
-	// // 検証用
-	// for (int i = 0; i < N; i++) cout << min_grass[i] << " ";
-	// cout << endl;
 	cout << ans << endl;
 	return 0;
 }
 ```
+
 ## 6.4 一手先を考える
-[A39 - Interval Scheduling Problem](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_bn)
+### A39 - Interval Scheduling Problem
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_bn
+
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2631,14 +2642,12 @@ int main()
 	return 0;
 }
 ```
-[B39 - Taro's Job](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dl)
+
+### B39 - Taro's Job
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dl
+
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int main()
 {
 	int N ,D, X[200009], Y[200009];
@@ -2676,13 +2685,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 6.5 個数を考える
-[A40 - Triangl](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_an)
+### A40 - Triangl
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_an
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 long long ft_choose(long long n)
 {
 	return  (n * (n - 1) * (n - 2)) / 6;
@@ -2709,12 +2718,12 @@ int main()
 	return 0;
 }
 ```
-[B40 - Divide by 100](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dm)
+
+### B40 - Divide by 100
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dm
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 long long ft_choose(long long n)
 {
 	return  (n * (n - 1)) / 2;
@@ -2750,13 +2759,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 6.6 後ろから考える
-[A41 - Tile Coloring](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ao)
+### A41 - Tile Coloring
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ao
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2787,12 +2796,12 @@ int main()
 	return 0;
 }
 ```
-[B41 - Reverse of Euclid](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dn)
+
+### B41 - Reverse of Euclid
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dn
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	long long X, Y;
@@ -2819,15 +2828,12 @@ int main()
 ```
 
 ## 6.7 固定して全探索
+### A42 - Soccer
 
-[A42 - Soccer](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ap)
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ap
+
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-
-using namespace std;
-
 int main()
 {
 	int N, K;
@@ -2856,20 +2862,18 @@ int main()
 		for (int j = 1; j <= 100 - K; j++)
 		{
 			ans = max(ans, max_member[i][j]);
-			// //検証よう
-			// cout << max_member[i][j] << " ";
 		}
 	}
 	cout << ans << endl;
 	return 0;
 }
 ```
-[B42 - Two Faced Card](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_do)
+
+### B42 - Two Faced Card
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_do
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -2909,12 +2913,11 @@ int main()
 ```
 
 ## 6.8 問題を言い換える
-[A43 - Travel 3](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aq)
+### A43 - Travel 3
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aq
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, L;
@@ -2933,12 +2936,11 @@ int main()
 }
 ```
 
-[B43 - Quiz Contest](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dp)
+### B43 - Quiz Contest
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dp
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, M;
@@ -2955,13 +2957,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 6.9 データの持ち方を工夫する
-[A44 - Change and Reverse](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ar)
+### A44 - Change and Reverse
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ar
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, Q;
@@ -2998,12 +3000,12 @@ int main()
 	return 0;
 }
 ```
-[B44 - Grid Operations](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dq)
+
+### B44 - Grid Operations
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dq
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	int N, Q;
@@ -3033,14 +3035,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 6.10 不変量に着目する
-[A45 - Card Elimination](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_as)
+### A45 - Card Elimination
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_as
+
 ```cpp
-#include <iostream>
-#include <string>
-
-using namespace std;
-
 int main()
 {
 	int N;
@@ -3072,12 +3073,13 @@ int main()
 	return 0;
 }
 ```
-[B45 - Blackboard 2](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dr)
+
+
+### B45 - Blackboard 2
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dr
+
 ```cpp
-#include <iostream>
-
-using namespace std;
-
 int main()
 {
 	long long a, b, c;
@@ -3087,16 +3089,16 @@ int main()
 	return 0;
 }
 ```
+
 # 7章 ヒューリスティック
 ## 7.0 ヒューリスティック系コンテストとは
 ## 7.1 貪欲法
-[A46 - Heuristic 1](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_at)
+### A46 - Heuristic 1
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_at
+
+
 ```cpp
-#include <iostream>
-#include <cmath>
-
-using namespace std;
-
 int N;
 int X[159], Y[159], route[159];
 bool visited[159];
@@ -3145,16 +3147,11 @@ int main()
 	return 0;
 }
 ```
+
 ## 7.2 局所探索法
-7.1と同様の問題を
+7.1と同様の問題を局所探索法（山登り法）で解く。
+
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <ctime>
-#include <algorithm>
-
-using namespace std;
-
 int N;
 int X[159], Y[159], route[159];
 bool visited[159];
@@ -3209,41 +3206,14 @@ int main()
 	return 0;
 }
 ```
+
 ## 7.3 焼きなまし法
-関数の名前がannealingではなくlocal_searchのままになっているほど、ほとんど同じコードです。
+関数の名前がannealingではなくlocal_searchのままになっているほど、7.2の山登り法とほとんど同じコードです。
+
 ```cpp
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-
-using namespace std;
-
 int N;
 int X[159], Y[159], route[159];
 bool visited[159];
-
-double ft_distance(int a, int b)
-{
-	return sqrt((X[a] - X[b]) *  (X[a] - X[b]) + (Y[a] - Y[b]) *  (Y[a] - Y[b]));
-}
-
-int ft_rand(int a, int b)
-{
-	return a + rand() % (b - a + 1);
-}
-
-double ft_rand_double()
-{
-	return (1.0 * rand()) / RAND_MAX;
-}
-
-double ft_get_score()
-{
-	double sum = 0;
-	for (int i = 1; i <= N ; i++) sum += ft_distance(route[i], route[i + 1]);
-	return sum;
-}
-
 
 void	ft_local_search()
 {
@@ -3283,20 +3253,34 @@ int main()
 	return 0;
 }
 ```
+
 ## 7.4 ビームサーチ
+### A49 - Heuristic 2
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aw
+
+```cpp
+
+```
+
 ## 7.5 チャレンジ問題
+### A50 - 山型足し算
+
+https://atcoder.jp/contests/tessoku-book/tasks/future_contest_2018_qual_a
+
+```cpp
+```
+
 ## column4 再帰関数 
+
 # 8章 データ構造とクエリ処理
 ## 8.0 データ構造とは
 ## 8.1 スタック
-[A51 - Stack](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ay)
+### A51 - Stack
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ay
+
 ```cpp
-#include <iostream>
-#include <stack>
-#include <string>
-
-using namespace std;
-
 int Q;
 int Query[100009];
 string x[100009];
@@ -3323,14 +3307,12 @@ int main()
 	return 0;
 }
 ```
-[B51 - Bracket](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dx)
+
+### B51 - Bracket
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dx
+
 ```cpp
-#include <iostream>
-#include <stack>
-#include <string>
-
-using namespace std;
-
 string S;
 stack<int> brackets;
 
@@ -3350,16 +3332,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 8.2 キュー
+### A52 - Queue
 
-[A52 - Queue](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_az)
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_az
+
 ```cpp
-#include <iostream>
-#include <queue>
-#include <string>
-
-using namespace std;
-
 int Q;
 int Query[100009];
 string x[100009];
@@ -3383,14 +3362,13 @@ int main()
 	return 0;
 }
 ```
-[B52 - Ball Simulation](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dy)
+
+### B52 - Ball Simulation
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dy
+
+
 ```cpp
-#include <iostream>
-#include <string>
-#include <queue>
-
-using namespace std;
-
 int N , X;
 string A;
 int ball_color[100009];
