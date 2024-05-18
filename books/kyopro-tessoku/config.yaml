@@ -1,0 +1,17 @@
+title: "【全問ACコード付き】競技プログラミングの鉄則を一周してみて"
+summary: "初心者がアルゴリズムを学んだ軌跡です"
+topics: ["AtCoder", "アルゴリズム", "競技プログラミングの鉄則"]
+published: false
+price: 0 # 有料の場合200〜5000
+# 本に含めるチャプターを順番に並べましょう
+chapters:
+  - chapter01
+  - chapter02
+  - chapter03
+  - chapter04
+  - chapter05
+  - chapter06
+  - chapter07
+  - chapter08
+  - chapter09
+  - chapter10
