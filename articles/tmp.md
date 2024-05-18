@@ -1662,6 +1662,34 @@ int main()
 }
 ```
 
+### B22 （A16 - Dungeon 1）
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_p
+
+ダンジョンの最短移動時間を求める問題。n番目の部屋への最短移動時間は(n-1)番目と(n-2)番目の部屋への最短移動時間を利用して解いていく。
+
+4.1で扱った問題を配る遷移方式で解いていく。
+
+```cpp
+int N, A[100009], B[100009];
+long long dp[100009];
+
+int main()
+{
+	cin >> N;
+	for (int i = 2; i <= N; i++) cin >> A[i];
+	for (int i = 3; i <= N; i++) cin >> B[i];
+	for (int i = 0; i <= N; i++) dp[i] = 100000000000;
+	dp[1] = 0;
+	for (int i = 1; i <= N - 1; i++)
+	{
+		dp[i + 1] = min(dp[i] + A[i + 1] , dp[i + 1]);
+		dp[i + 2] = min(dp[i] + B[i + 2], dp[i + 2]);
+	}
+	cout << dp[N] << endl;
+	return 0;
+}
+```
 
 ## 4.8 ビットDP
 ### A23 - All Free
@@ -1856,9 +1884,53 @@ int main()
 
 ### B24 - Many Boxes
 
+この問題は難しかった。5時間近くかかってしまった。。
+
+単純な動的計画法ならすぐ実装できたが、半分くらいの想定ケースでTLEになってしまっていた。
+
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cw
 
 ```cpp
+// 比較関数
+bool customSort(const pair<int, int>& a, const pair<int, int>& b) {
+    if (a.first == b.first) { // first が同じ場合
+        return a.second > b.second; // second を降順で比較
+    }
+    return a.first < b.first; // first を昇順で比較
+}
+
+int main() {
+    int N;
+    cin >> N;
+
+    vector<pair<int, int>> boxes(N);
+    for (int i = 0; i < N; i++) {
+        cin >> boxes[i].first >> boxes[i].second;
+    }
+
+    // カスタムの比較関数を使ってソート
+    sort(boxes.begin(), boxes.end(), customSort);
+
+    int ans = 0;
+    vector<int> height;
+    for (int i = 0; i < N; i++) {
+        auto it = lower_bound(height.begin(), height.end(), boxes[i].second);
+        int index = it - height.begin();
+        if (it == height.end() || *it != boxes[i].second) {
+            if (index == height.size()) {
+                height.push_back(boxes[i].second);
+            } else {
+                height[index] = boxes[i].second;
+            }
+        }
+        ans = max(ans, index + 1);
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
+
 ```
 
 ## 4.10 チャレンジ問題
@@ -1868,6 +1940,33 @@ https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_cw
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_y
 
 ```cpp
+long long H, W;
+char c[39][39];
+long long dp[39][39];
+
+int main()
+{
+	cin >> H >> W;
+	for (int i = 1; i <= H; i++)
+	{
+		for (int j = 1; j <= W; j++) cin >> c[i][j];
+	}
+	for (int i = 1; i <= H; i++)
+	{
+		for (int j = 1; j <= W; j++)
+		{
+			if (i == 1 && j == 1) dp[i][j] = 1;
+			else
+			{
+				dp[i][j] = 0;
+				if (i > 1 && c[i - 1][j] == '.') dp[i][j] += dp[i - 1][j];
+				if (j > 1 && c[i][j - 1] == '.') dp[i][j] += dp[i][j - 1];
+			}
+		}
+	}
+	cout << dp[H][W] << endl;
+	return 0;
+}
 ```
 
 # 5章 数学的問題
@@ -2120,8 +2219,12 @@ int main()
 普通に毎度の余を求めて計算がうまくいかないの（試してみてください）ので、フェルマーの小定理を用いて式変形を行います。
 フェルマーの小定理は[こちら](https://qiita.com/drken/items/6b4031ccbb2cab7436f3)のqiitaの記事がわかりやすいです。競技プログラミングにおける例題も挙げて頂いているので問題演習にもいいかもですね。
 
-[A30 - Combination](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ad)
+### A30 - Combination
+
 組み合わせのが何通りあるか調べるnCrの計算。なぜか書籍に載っていた解答例だとACが出なかった。前述のft_power()関数を用いてr項分の掛け算をしていく。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ad
+
 ```cpp
 unsigned long long ft_division(unsigned long long a, unsigned long long b, unsigned long long m)
 {
@@ -2152,6 +2255,44 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_dc
 
 ```cpp
+unsigned long long ft_power(unsigned long long a, unsigned long long b, unsigned long long m)
+{
+	unsigned long long ans = 1;
+	a %= m;
+	while (b > 0)
+	{
+		if (b & 1)
+			ans = (ans * a) % m;
+		b >>= 1;
+		a = (a * a) % m;
+	}
+	return ans ;
+}
+
+unsigned long long ft_division(unsigned long long a, unsigned long long b, unsigned long long m)
+{
+	return (a * ft_power(b , m - 2, m)) % m;
+}
+
+
+int main()
+{
+	unsigned long long m = 1000000007;
+	unsigned long long H;
+	unsigned long long W;
+	cin >> H >> W;
+
+	unsigned long long ans = 1;
+	unsigned long long n = H + W - 2;
+	unsigned long long r = H - 1;
+	for (int i = 1; i <= r; i++)
+	{
+		ans = (ans * ft_division(n - i + 1, r - i + 1, m)) % m;
+	}
+	
+	cout << ans << endl;
+	return 0;
+}
 ```
 
 ## 5.6 包除原理
@@ -3260,15 +3401,193 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_aw
 
 ```cpp
+struct State
+{
+	int score;		// 暫定のスコア
+	int X[29];		// 暫定のXの配列
+	char LastMove;	// 最後の動き
+	int LastPos;	// Beam@[i - 1][？]から遷移したか
+};
 
+bool	operator>(const State& a1, const State& a2)
+{
+	if (a1.score > a2.score) return true;
+	else return false;
+}
+
+const int WIDTH = 10000; // ビーム幅
+const int N = 20;
+int T, P[109], Q[109], R[109];
+int NumState[109];
+State Beam[109][WIDTH];
+char Answer[109];
+
+void BeamSearch()
+{
+	// 初期状態の設定
+	NumState[0] = 1;
+	Beam[0][0].score = 0;
+	for(int i= 1; i<= N; i++) Beam[0][0].X[i] = 0;
+
+	// ビームサーチ
+	for(int i = 1; i <= T; i++)
+	{
+		vector<State> Candidate;
+		for(int j = 0; j <= NumState[i -1]; j++)
+		{
+			// 操作Aの場合
+			State SousaA = Beam[i - 1][j];
+			SousaA.LastMove = 'A';
+			SousaA.LastPos = j;
+			SousaA.X[P[i]] += 1;
+			SousaA.X[Q[i]] += 1;
+			SousaA.X[R[i]] += 1;
+			for(int k = 1; k <= T; k++)
+			{
+				if (SousaA.X[k] == 0) SousaA.score += 1;
+			}
+			
+			// 操作Bの場合
+			State SousaB = Beam[i - 1][j];
+			SousaB.LastMove = 'B';
+			SousaB.LastPos = j;
+			SousaB.X[P[i]] += 1;
+			SousaB.X[Q[i]] += 1;
+			SousaB.X[R[i]] += 1;
+			for(int k = 1; k <= T; k++)
+			{
+				if (SousaB.X[k] == 0) SousaB.score += 1;
+			}
+			Candidate.push_back(SousaA);
+			Candidate.push_back(SousaB);
+		}
+		sort(Candidate.begin(), Candidate.end(), greater<State>());
+		NumState[i] = min(WIDTH, (int)Candidate.size());
+		for(int j = 0; j <= NumState[i]; j++) Beam[i][j] = Candidate[j];
+	}
+}
+
+int main()
+{
+	// 入力
+	cin >> T;
+	for (int i = 1; i <= T; i++) cin >> P[i] >> Q[i] >> R[i];
+	// ビームサーチ
+	BeamSearch();
+	// ビームサーチの復元
+	int current_place = 0;
+	for (int i = T; i >= 1; i--)
+	{
+		Answer[i] = Beam[i][current_place].LastMove; 
+		current_place = Beam[i][current_place].LastPos; 
+	}
+	// 出力
+	for (int i = 1; i <= T; i++) cout << Answer[i] << endl;;
+}
 ```
 
 ## 7.5 チャレンジ問題
 ### A50 - 山型足し算
 
+実際の大会で出題された問題らしく、非常に歯応えがある問題。（難しい）
+
+正直まだ理解できていないので、再実装必須。
+
 https://atcoder.jp/contests/tessoku-book/tasks/future_contest_2018_qual_a
 
 ```cpp
+#include <iostream>
+#include <cmath>
+#include <ctime>
+#include <algorithm>
+using namespace std;
+
+int N = 100;
+int Q = 1000;
+int A[109][109], B[109][109];
+int X[1009], Y[1009], H[1009];
+
+// L 以上 R 以下のランダムな整数を返す関数
+int RandInt(int L, int R) {
+	return rand() % (R - L + 1) + L;
+}
+
+// 現在のスコアを返す関数
+int GetScore() {
+	int sum = 0;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) sum += abs(A[i][j] - B[i][j]);
+	}
+	return 200000000 - sum;
+}
+
+// X[t]=x, Y[t]=y, H[t]=h に変更する関数
+void Change(int t, int x, int y, int h) {
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			B[j][i] -= max(0, H[t] - abs(X[t] - i) - abs(Y[t] - j));
+		}
+	}
+	X[t] = x;
+	Y[t] = y;
+	H[t] = h;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			B[j][i] += max(0, H[t] - abs(X[t] - i) - abs(Y[t] - j));
+		}
+	}
+}
+
+void Yamanobori() {
+	// 変数の設定（5.95 秒ループを回す）
+	int TIMELIMIT = 5.95 * CLOCKS_PER_SEC;
+	int CurrentScore = GetScore();
+	int ti = clock();
+
+	// 山登り法スタート
+	while (clock() - ti < TIMELIMIT) {
+		int t = RandInt(1, Q);
+		int old_x = X[t], new_x = X[t] + RandInt(-9, 9);
+		int old_y = Y[t], new_y = Y[t] + RandInt(-9, 9);
+		int old_h = H[t], new_h = H[t] + RandInt(-19, 19);
+		if (new_x < 0 || new_x >= N) continue;
+		if (new_y < 0 || new_y >= N) continue;
+		if (new_h <= 0 || new_h > N) continue;
+
+		// とりあえず変更し、スコアを評価する
+		Change(t, new_x, new_y, new_h);
+		int NewScore = GetScore();
+
+		// スコアに応じて採用／不採用を決める
+		if (CurrentScore < NewScore) CurrentScore = NewScore;
+		else Change(t, old_x, old_y, old_h);
+	}
+}
+
+int main() {
+	// 入力
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) cin >> A[i][j];
+	}
+
+	// 初期解を生成
+	for (int i = 1; i <= 1000; i++) {
+		X[i] = rand() % N; // 0 以上 N-1 以下のランダムな整数
+		Y[i] = rand() % N; // 0 以上 N-1 以下のランダムな整数
+		H[i] = 1;
+		B[X[i]][Y[i]] += 1;
+	}
+
+	// 山登り法
+	Yamanobori();
+
+	// 出力
+	cout << "1000" << endl;
+	for (int i = 1; i <= 1000; i++) {
+		cout << X[i] << " " << Y[i] << " " << H[i] << endl;
+	}
+	return 0;
+}
 ```
 
 ## column4 再帰関数 
@@ -3415,6 +3734,7 @@ int main()
 	return 0;
 }
 ```
+
 ## 8.3 優先度つきキュー
 要素を昇順や降順で保存しておくことができるキュー。
 
@@ -3423,7 +3743,10 @@ int main()
 具体的には、`priority_queue<int>`と記述すると、`priority_queue<int, vector<int>, less<int>>`
 になっているので、`priority_queue<int, vector<int>, greater<int>>`へ変更してあげる必要がある。
 
-[A53 - Priority Queue](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ba)
+### A53 - Priority Queue
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ba
+
 ```cpp
 #include <iostream>
 #include <queue>
@@ -3454,16 +3777,16 @@ int main()
 	return 0;
 }
 ```
+
 ## 8.4 連想配列
 連想配列はインデックスを自由に指定できる配列、という表現が一番しっくりきた。
-[A54 - Map](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bb)
+
+### A54 - Map
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bb
+
+
 ```cpp
-#include <iostream>
-#include <map>
-#include <string>
-
-using namespace std;
-
 int Q;
 int query[100009];
 int score[100009];
@@ -3493,13 +3816,12 @@ int main()
 	return 0;
 }
 ```
-[B54 - Counting Same Values](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ea)
+
+### B54 - Counting Same Values
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ea
+
 ```cpp
-#include <iostream>
-#include <map>
-
-using namespace std;
-
 long long N;
 long long A[100009];
 map<long long, long long> count_num;
@@ -3533,13 +3855,11 @@ int main()
 ```
 
 ## 8.5 集合の管理
-[A55 - Set](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bc)
+### A55 - Set
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bc
+
 ```cpp
-#include <iostream>
-#include <set>
-
-using namespace std;
-
 int Q;
 int Query[100009];
 int Card[100009];
@@ -3569,16 +3889,13 @@ int main()
 	return 0;
 }
 ```
-[B55 - Difference](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_eb)
+
+### B55 - Difference
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_eb
+
+
 ```cpp
-#include <iostream>
-#include <set>
-#include <cmath>
-#include <algorithm>
-#include <climits>
-
-using namespace std;
-
 int Q;
 int Query[100009];
 int Card[100009];
@@ -3633,13 +3950,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bd
 
 ```cpp
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
-#include <climits>
-using namespace std;
-
 long long N, Q;
 string S;
 long long a[200009];
@@ -3697,13 +4007,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ec
 
 ```cpp
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <algorithm>
-#include <climits>
-using namespace std;
-
 long long N, Q;
 string S;
 string S_rev;
@@ -3814,17 +4117,13 @@ int main()
 	return 0;
 }
 ```
+
 ## 8.8 セグメント木：RMQ
 ### A58 - RMQ (Range Maximum Queries)
 
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bf
 
 ```cpp
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
 class SegmentTree{
 	public:
 	int dat[300000];
@@ -3900,13 +4199,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ee
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <climits>
-
-using namespace std;
-
 class SegmentTree {
 private:
     vector<int> tree;
@@ -3981,13 +4273,6 @@ int main() {
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bg
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <climits>
-
-using namespace std;
-
 class SegmentTree {
 private:
     vector<int> tree;
@@ -4065,19 +4350,67 @@ int main() {
 
 ```
 
+### B59 - Number of Inversions
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ef
+
+```cpp
+
+```
+
 ## 8.10 チャレンジ問題
+### A60 - Stock Price
+
+情報の取捨選択が大切な問題。もう絶対に起算日にならない！という日をstackから消去していく。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bh
+
+```cpp
+int N, A[200009];
+int Answer[200009];
+stack<pair<int, int>> Level2;
+
+int main() {
+	// 入力
+	cin >> N;
+	for (int i = 1; i <= N; i++) cin >> A[i];
+
+	// スタックの変化の再現
+	for (int i = 1; i <= N; i++) {
+		if (i >= 2) {
+			Level2.push(make_pair(i - 1, A[i - 1]));
+			while (!Level2.empty()) {
+				int kabuka = Level2.top().second;
+				if (kabuka <= A[i]) Level2.pop();
+				else break;
+			}
+		}
+
+		// 起算日の特定
+		if (!Level2.empty()) Answer[i] = Level2.top().first;
+		else Answer[i] = -1;
+	}
+
+	// 出力
+	for (int i = 1; i <= N; i++) {
+		if (i >= 2) cout << " ";
+		cout << Answer[i];
+	}
+	cout << endl;
+	return 0;
+}
+```
 
 # 9章 グラフアルゴリズム 
 ## 9.0 グラフとは
 ## コラム5 グラフに関する用語
 ## 9.1 グラフの実装方法
-[A61 - Adjacent Vertices](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bi)
+
+### A61 - Adjacent Vertices
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bi
+
 ```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
 int N, M;
 int A[100009], B[100009];
 vector<int> Graph[100009];
@@ -4104,14 +4437,12 @@ int main()
 	return 0;
 }
 ```
-[B61 - Influencer](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_eh)
+
+### B61 - Influencer
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_eh
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <vector>
-
-using namespace std;
-
 int N, M;
 int A[100009], B[100009];
 vector<int> Friends[100009];
@@ -4140,14 +4471,14 @@ int main()
 	return 0;
 }
 ```
+
 ## 9.2 深さ優先探索
-[A62 - Depth First Search](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_am)
+### A62 - Depth First Search
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_am
+
+
 ```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
 int N, M;
 int A[100009], B[100009];
 vector<int> Graph[100009];
@@ -4190,13 +4521,12 @@ int main()
 	return 0;
 }
 ```
-[B62 - Print a Path](https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ei)
+
+### B62 - Print a Path
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ei
+
 ```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
 int N, M;
 int A[100009], B[100009];
 vector<int> Graph[100009];
@@ -4247,15 +4577,11 @@ int main()
 https://qiita.com/messhii222/items/4a66e5f0f9ad37b2f18d
 
 ## 9.3 幅優先探索
-[A63 - Shortest Path 1](https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_an)
+### A63 - Shortest Path 1
+
+https://atcoder.jp/contests/tessoku-book/tasks/math_and_algorithm_an
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-
-using namespace std;
-
 int N, M;
 int A[100009], B[100009];
 vector<int> Graph[100009];
@@ -4288,7 +4614,6 @@ int main()
 			int next = Graph[pos][i];
 			if (dist[next] == -1)
 			{
-				// 今回のケースではdistが更新されることはない
 				dist[next] = dist[pos] + 1;
 				Q.push(next);
 			}
@@ -4300,15 +4625,11 @@ int main()
 }
 ```
 
-[B63 - 幅優先探索](https://atcoder.jp/contests/tessoku-book/tasks/abc007_3)
+### B63 - 幅優先探索
+
+https://atcoder.jp/contests/tessoku-book/tasks/abc007_3
+
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-
-using namespace std;
-
 int R, C, sy, sx, gy, gx;
 char board[2509];
 int dist[2509];
@@ -4360,7 +4681,6 @@ int main()
 			int next = Graph[pos][i];
 			if (dist[next] == -1 || dist[next] > dist[pos] + 1)
 			{
-				// 今回のケースではdistが更新されることはない
 				dist[next] = dist[pos] + 1;
 				Q.push(next);
 			}
@@ -4447,14 +4767,6 @@ int main() {
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ek
 
 ```cpp
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-#include <stack>
-
-using namespace std;
-
 const int INF = 1e9;
 
 int N, M;
@@ -4532,11 +4844,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bm
 
 ```cpp
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
 int N;
 int A[100009];
 int dp[100009];
@@ -4570,14 +4877,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_el
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-#include <cmath>
-
-using namespace std;
-
 int N, T;
 int A[100009];
 int B[100009];
@@ -4719,12 +5018,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_em
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <stack>
-
-using namespace std;
-
 int N, M, Q;
 int A[100009], B[100009];
 int Query[100009], U[100009], V[100009];
@@ -4813,12 +5106,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bo
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int N, M;
 int A[100009];
 int B[100009];
@@ -4894,12 +5181,6 @@ A67のソートを昇順から降順に変更するだけ。
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_en
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int N, M;
 int A[100009];
 int B[100009];
@@ -5094,12 +5375,6 @@ https://koyumeishi.hatenablog.com/entry/2021/01/14/052223
 https://zenn.dev/kiwamachan/articles/37a2c646f82c7d
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 struct Edge{
 	int to;		// 行き先
 	int cap;	// 容量
@@ -5204,12 +5479,6 @@ https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bq
 
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 struct Edge{
 	int to;		// 行き先
 	int cap;	// 容量
@@ -5422,12 +5691,6 @@ int main()
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_br
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-
-using namespace std;
-
 int N, M;
 int A[19];
 int X[109];
@@ -5511,15 +5774,15 @@ int main()
 ## 10.1 総合問題(1)
 ### A71 - Homework
 
+ついに総合問題突入。
+最初の問題は、夏休みN日の間に1日1つ課題をこなしていくが、宿題の難易度と気温の積だけ労力がかかる。必要最小限の労力はいくつか、というもの。
+
+よくよく考えれば、高い難易度の宿題ほど気温が低い時にやった方がいい。
+ということで宿題は昇順、気温は降順でソートしてからそれぞれの要素同士の積の和を取ったものが最小の労力になる。
+
 https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bs
 
 ```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 int N;
 
 int main()
@@ -5540,10 +5803,127 @@ int main()
 ```
 
 ## 10.2 総合問題(2)
+### A72 - Tile Painting
+
+H*Wのタイルのマスが黒と白で塗り分けられている。
+
+特定の列か行を選び、全て黒で塗る操作をK回行える時、最大でいくつのマスを黒くすることができるか。
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bt
+
+```cpp
+int H, W, K;
+char tile[19][109];
+char tile_test[19][109];
+
+int	ft_score()
+{
+	int score = 0;
+	for (int i = 1; i <= H; i++)
+	{
+		for (int j = 1; j <= W; j++)
+		{
+			if (tile_test[i][j] == '#') score++;
+		}
+	}
+	return score;
+}
+
+void ft_paint_column(int remainig_steps)
+{
+	vector<pair<int, int>> columns;
+	for (int j = 1; j <= W; j++)
+	{
+		int count = 0;
+		for (int i = 1; i <= H; i++)
+		{
+			if (tile_test[i][j] == '.') count++;
+		}
+		columns.push_back(make_pair(count, j));
+	}
+	sort(columns.begin(), columns.end());
+	reverse(columns.begin(), columns.end());
+	// 余っている回数分、白が多い列から塗っていく
+	for (int k = 0; k < remainig_steps && k < W; k++)
+	{
+		for (int i = 1; i <= H; i++) tile_test[i][columns[k].second] = '#';
+	}
+}
+
+int main()
+{
+	// 入力
+	cin >> H >> W >> K;
+	for (int i = 1; i <= H; i++)
+	{
+		for (int j = 1; j <= W; j++) cin >> tile[i][j];
+	}
+	// 列の全探索
+	int ans = 0;
+	for (int i = 0; i < (1 << H); i++)
+	{
+		int remainig_steps = K;
+		for (int i = 1; i <= H; i++)
+		{
+			for (int j = 1; j <= W; j++) tile_test[i][j] = tile[i][j];
+		}
+		for (int k = 0; k < H; k++)
+		{
+			if (remainig_steps < 1) break;
+			if ((i >> k) & 1)
+			{
+				remainig_steps--;
+				for (int j = 1; j <= W; j++) tile_test[k + 1][j] = '#';
+			}
+		}
+		if(remainig_steps > 0) ft_paint_column(remainig_steps);
+		ans = max(ans, ft_score());
+	}
+	cout << ans << endl;
+	return 0;
+}
+```
+
 ## 10.3 総合問題(3)
+### A73 - Marathon Route
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bu
+
+```cpp
+```
+
+
 ## 10.4 総合問題(4)
+### A74 - Board Game
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bv
+
+```cpp
+```
+
 ## 10.5 総合問題(5)
+### A75 - Examination
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bw
+
+```cpp
+```
+
 ## 10.6 総合問題(6)
+### A76 - River Crossing 
+
+https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_bx
+
+```cpp
+```
+
+
 ## 10.7 総合問題(7)
+### A77 - Yokan Party（★4）
+
+https://atcoder.jp/contests/tessoku-book/tasks/typical90_a
+
+```cpp
+```
 
 
