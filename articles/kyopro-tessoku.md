@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "【総集編】「競技プログラミングの鉄則」を全問解いてみた【全演習問題ACコードあり】"
 emoji: "🐷"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: []
@@ -6158,9 +6158,48 @@ int main()
 ## 10.7 総合問題(7)
 ### A77 - Yokan Party（★4）
 
+`long long mid = (left + right + 1) / 2`の部分の+1を入れておらず、TLE祭りに悩まされた。+1を入れてもleftとrightの間に必ずmidがくるし、leftとrightの間の差が1しかない時にmidがleftのままになってwhile文が無限ループしてしまうのが原因だと考えられる。
+
 https://atcoder.jp/contests/tessoku-book/tasks/typical90_a
 
 ```cpp
-```
+int N, L, K;
+int A[100009];
 
+bool ft_check(int dist)
+{
+	int cut_count = 0;
+	int last_cut_point = 0;
+	for (int i = 1; i <= N; i++)
+	{
+		if (A[i] - last_cut_point >= dist && L - A[i] >= dist)
+		{
+			cut_count++;
+			last_cut_point = A[i];
+		}
+	}
+	if (cut_count >= K) return true;
+	return false;
+}
+
+int main()
+{
+	// 入力
+	cin >> N >> L >> K;
+	for (int i = 1; i <= N; i++) cin >> A[i];
+	// 切れる数を二分探索
+	long long left = 0;
+	long long right = 1e9;
+	while (left < right)
+	{
+		// +1を入れないとずっとwhile文を回ってしまう時がある
+		long long mid = (left + right + 1) / 2;
+		if (ft_check(mid)) left = mid;
+		else right = mid - 1;
+	}
+	// 出力
+	cout << left << endl;
+	return 0;
+}
+```
 
